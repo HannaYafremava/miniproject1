@@ -13,79 +13,59 @@
 
 /** Created by PhpStorm */
 
-main::start();
+main::start("info.csv");
 
 class main {
 
-    /**
-     *
-     */
-    static public function start() {
-        $records = csv::getRecords();
-        $table = html::generateTable($records);
-        system::printPage($table);
+
+    static public function start($filename)
+    {
+
+     $records=csv::getRecords($filename);
+
+     $record=recordFactory::create();
+
+     print_r($record);
 
     }
-
-
 }
 
 
 
+class csv{
 
+    static public function getRecords($filename)
+    {
+        $file = fopen($filename,"r");
 
-class csv {
-    static public function getRecords() {
-        $make='Lambo';
-        $model='Bling';
-        $car = AutomobileFactory::create($make, $model);
-        $records[]=$car;
+        while(! feof($file))
+        {
+            $record=fgetcsv($file);
 
-        print_r($records);
+            $records[] = $record;
+        }
 
+        fclose($file);
         return $records;
-    }
-}
-
-class html{
-    static public function generateTable($records) {
-
-        $table = $records;
-
-        return $table;
 
     }
+
 }
 
-class system {
-
-    static public function printPage($page){
-        echo $page;
-    }
-}
-
-class Automobile
+class record
 {
-    private $vehicleMake;
-    private $vehicleModel;
 
-    public function __construct($make, $model)
-    {
-        $this->vehicleMake = $make;
-        $this->vehicleModel = $model;
-    }
 
-    public function getMakeAndModel()
-    {
-        return $this->vehicleMake . ' ' . $this->vehicleModel;
-    }
 }
 
-class AutomobileFactory
+class recordFactory
 {
-    public static function create($make, $model)
+
+    public static function create (Array $array=null)
     {
-        return new Automobile($make, $model);
+
+        $record=new record();
+
+        return $record;
     }
 }
-
