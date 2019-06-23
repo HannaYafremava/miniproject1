@@ -1,12 +1,4 @@
-<html>
-<head>
 
-</head>
-
-<body>
-
-</body>
-</html>
 
 
 <?php
@@ -46,10 +38,10 @@ class csv{
         while(! feof($file))
         {
             $record=fgetcsv($file);
+
             if($count==0) {
                 $fieldNames = $record;
-            }
-            else{
+            } else{
 
                 $records[] = recordFactory::create($fieldNames, $record);
             }
@@ -67,14 +59,24 @@ class csv{
 
 class record{
 
+    /**
+     * record constructor.
+     * @param array|null $fieldNames
+     * @param null $values
+     */
     public function __construct(Array $fieldNames=null, $values=null)
     {
 
-        print_r($fieldNames);
-        print_r($values);
-        
 
-        $this->createProperty();
+        $record=array_combine($fieldNames, $values);
+
+       foreach ($record as $property => $value){
+
+           $this->createProperty($property, $value);
+
+       }
+
+        print_r($this);
 
 
     }
@@ -85,6 +87,9 @@ class record{
 
 
     }
+
+
+
 }
 
 class recordFactory {
@@ -93,7 +98,7 @@ class recordFactory {
 
 
 
-         $record=new record($fieldNames, $values);
+        $record = new record($fieldNames, $values);
 
         return $record;
     }
